@@ -32,4 +32,4 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: |
-          NODE_ENV=production yarn compile:web
+          NODE_ENV=production yarn build
