@@ -35,7 +35,7 @@
     "dist": "electron-builder",
     "build": "cross-env NODE_ENV=production yarn compile:electron && electron-builder build",
     "build:dir": "yarn build -- --dir -c.compression=store -c.mac.identity=null",
-    "lint": "eslint ui/**/*.{js,jsx} && eslint web/{component,effects,middleware,page,setup,src} && eslint electron/**/*.js && flow",
+    "lint": "eslint ui/**/*.{js,jsx} && eslint web/**/*.{js,jsx} && eslint electron/**/*.js && flow",
     "flow-defs": "flow-typed install",
     "precommit": "lint-staged",
     "preinstall": "yarn cache clean lbry-redux && yarn cache clean lbryinc",
