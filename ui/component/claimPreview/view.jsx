@@ -58,6 +58,7 @@ type Props = {
   getFile: string => void,
   customShouldHide?: Claim => boolean,
   showUnresolvedClaim?: boolean,
+  showNullPlaceholder?: boolean,
   includeSupportAction?: boolean,
   hideActions?: boolean,
   renderActions?: Claim => ?Node,
@@ -94,6 +95,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     streamingUrl,
     customShouldHide,
     showUnresolvedClaim,
+    showNullPlaceholder,
     includeSupportAction,
     hideActions = false,
     renderActions,
@@ -107,6 +109,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   const showPublishLink = abandoned && !showUnresolvedClaim && placeholder === 'publish';
   const shouldHideActions = hideActions || type === 'small' || type === 'tooltip';
   const canonicalUrl = claim && claim.canonical_url;
+  console.log('pending', pending);
   let isValid = false;
   if (uri) {
     try {
@@ -129,6 +132,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   let shouldHide =
     placeholder !== 'loading' &&
     !showUserBlocked &&
+    !showNullPlaceholder &&
     ((abandoned && !showUnresolvedClaim && !showPublishLink) || (!claimIsMine && obscureNsfw && nsfw));
 
   // This will be replaced once blocking is done at the wallet server level
@@ -154,7 +158,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   }
   // block channel claims if we can't control for them in claim search
   // e.g. fetchRecommendedSubscriptions
-  if (claim && isChannel && !shouldHide && !showUserBlocked && blockedChannelUris.length) {
+  if (claim && isChannel && !shouldHide && !showUserBlocked && !showNullPlaceholder && blockedChannelUris.length) {
     shouldHide = blockedChannelUris.some(blockedUri => blockedUri === claim.permanent_url);
   }
 
@@ -199,7 +203,12 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     return null;
   }
 
-  if (placeholder === 'loading' || claim === undefined || (isResolvingUri && !claim)) {
+  if (
+    placeholder === 'loading' ||
+    claim === undefined ||
+    (claim === null && showNullPlaceholder) ||
+    (isResolvingUri && !claim && !showNullPlaceholder)
+  ) {
     return (
       <li
         disabled

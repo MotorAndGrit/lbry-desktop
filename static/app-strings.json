@@ -1498,5 +1498,11 @@
   "Now following %channel%!": "Now following %channel%!",
   "Turn Back On": "Turn Back On",
   "Turn Off": "Turn Off",
+  "No Results": "No Results",
+  "Would you like to publish or repost what you think should be at %QUERY_URI%": "Would you like to publish or repost what you think should be at %QUERY_URI%",
+  "Clean Slate": "Clean Slate",
+  "What do you think should be at %QUERY_URI%?": "What do you think should be at %QUERY_URI%?",
+  "Repost to %uri%": "Repost to %uri%",
+  "What do you think should be at lbry://%QUERY_URI%?": "What do you think should be at lbry://%QUERY_URI%?",
   "--end--": "--end--"
 }
