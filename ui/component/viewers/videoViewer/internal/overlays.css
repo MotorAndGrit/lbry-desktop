@@ -1,6 +1,7 @@
 @import './plugins/videojs-overlay/plugin.scss';
 
 .video-js {
+  .vjs-overlay-seeked,
   .vjs-overlay-playrate {
     background-color: rgba(0, 0, 0, 0.5);
     font-size: var(--font-large);
