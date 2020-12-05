@@ -28,7 +28,6 @@ type Props = {
   doCheckPublishNameAvailability: string => Promise<*>,
   error: ?string,
   reposting: boolean,
-  // also, from qs
   uri: string,
   name: string,
   repostUri: string,
@@ -112,7 +111,6 @@ function RepostCreate(props: Props) {
   }, [repostName, doCheckPublishNameAvailability]);
 
   React.useEffect(() => {
-    // if valid
     if (enteredUri) {
       let isValid = false;
       try {
@@ -149,7 +147,6 @@ function RepostCreate(props: Props) {
   function cancelIt() {
     doClearRepostError();
     goBack();
-    // navigate back
   }
 
   return (

@@ -40,10 +40,6 @@ export default function SearchTopClaim(props: Props) {
     }
   } catch (e) {}
 
-  // React.useEffect(() => {
-  //   if (checkPendingClaims) checkPendingClaims();
-  // }, [checkPendingClaims]);
-
   React.useEffect(() => {
     let urisToResolve = [];
     if (uriFromQuery) {
@@ -58,10 +54,6 @@ export default function SearchTopClaim(props: Props) {
       doResolveUris(urisToResolve);
     }
   }, [doResolveUris, uriFromQuery, channelUriFromQuery]);
-
-  // if (!winningUri) {
-  //   return null;
-  // }
 
   return (
     <section className="search">
