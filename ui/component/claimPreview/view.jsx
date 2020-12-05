@@ -109,7 +109,6 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   const showPublishLink = abandoned && !showUnresolvedClaim && placeholder === 'publish';
   const shouldHideActions = hideActions || type === 'small' || type === 'tooltip';
   const canonicalUrl = claim && claim.canonical_url;
-  console.log('pending', pending);
   let isValid = false;
   if (uri) {
     try {
@@ -132,7 +131,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   let shouldHide =
     placeholder !== 'loading' &&
     !showUserBlocked &&
-    !showNullPlaceholder &&
+    // !showNullPlaceholder && // here
     ((abandoned && !showUnresolvedClaim && !showPublishLink) || (!claimIsMine && obscureNsfw && nsfw));
 
   // This will be replaced once blocking is done at the wallet server level
@@ -158,7 +157,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   }
   // block channel claims if we can't control for them in claim search
   // e.g. fetchRecommendedSubscriptions
-  if (claim && isChannel && !shouldHide && !showUserBlocked && !showNullPlaceholder && blockedChannelUris.length) {
+  if (claim && isChannel && !shouldHide && !showUserBlocked && blockedChannelUris.length) {
     shouldHide = blockedChannelUris.some(blockedUri => blockedUri === claim.permanent_url);
   }
 
@@ -199,15 +198,15 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     }
   }, [isValid, isResolvingUri, uri, resolveUri, shouldFetch]);
 
-  if (shouldHide) {
+  if (shouldHide && !showNullPlaceholder) {
     return null;
   }
 
   if (
     placeholder === 'loading' ||
     claim === undefined ||
-    (claim === null && showNullPlaceholder) ||
-    (isResolvingUri && !claim && !showNullPlaceholder)
+    (shouldHide && showNullPlaceholder) ||
+    (isResolvingUri && !claim)
   ) {
     return (
       <li
@@ -218,7 +217,11 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
         })}
       >
         <div className={classnames('claim-preview', { 'claim-preview--large': type === 'large' })}>
-          <div className="placeholder media__thumb" />
+          <div className="placeholder media__thumb">
+            {nsfw && (
+              <span className={'media__thumb-placeholder-text'}>{__('Mature content hidden by your preferences')}</span>
+            )}
+          </div>
           <div className="placeholder__wrapper">
             <div className="placeholder claim-preview__title" />
             <div className="placeholder media__subtitle" />

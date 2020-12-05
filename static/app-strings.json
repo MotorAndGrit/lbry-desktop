@@ -1504,5 +1504,13 @@
   "What do you think should be at %QUERY_URI%?": "What do you think should be at %QUERY_URI%?",
   "Repost to %uri%": "Repost to %uri%",
   "What do you think should be at lbry://%QUERY_URI%?": "What do you think should be at lbry://%QUERY_URI%?",
+  "Search Results": "Search Results",
+  "View All Results": "View All Results",
+  "Preview": "Preview",
+  "Mature content hidden by your preferences": "Mature content hidden by your preferences",
+  "Most Supported": "Most Supported",
+  "Repost your favorite claims to help more people discover them. if they have <> you will have to outbid them.": "Repost your favorite claims to help more people discover them. if they have <> you will have to outbid them.",
+  "Content preview": "Content preview",
+  "Repost url": "Repost url",
   "--end--": "--end--"
 }

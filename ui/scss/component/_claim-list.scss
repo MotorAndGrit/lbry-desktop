@@ -98,6 +98,12 @@
     margin-right: var(--spacing-m);
   }
 
+  .media__thumb-placeholder-text {
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-m);
+  }
+
   .channel-thumbnail {
     @include handleChannelGif(6rem);
   }

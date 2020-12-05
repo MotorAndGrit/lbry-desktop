@@ -14,15 +14,15 @@ import usePersistedState from 'effects/use-persisted-state';
 import I18nMessage from 'component/i18nMessage';
 import analytics from 'analytics';
 import LbcSymbol from 'component/common/lbc-symbol';
-import ClaimPreview from '../claimPreview';
+import ClaimPreview from 'component/claimPreview';
 
 type Props = {
   doToast: ({ message: string }) => void,
   doClearRepostError: () => void,
   doRepost: StreamRepostOptions => Promise<*>,
   title: string, //
-  claim: ?StreamClaim,
-  enteredClaim: ?StreamClaim,
+  claim?: StreamClaim,
+  enteredClaim?: StreamClaim,
   balance: number,
   channels: ?Array<ChannelClaim>,
   doCheckPublishNameAvailability: string => Promise<*>,
@@ -54,7 +54,7 @@ function RepostCreate(props: Props) {
     setRepostUri,
     doCheckPendingClaims,
   } = props;
-  const defaultName = name || (claim && claim.name);
+  const defaultName = name || (claim && claim.name) || '';
   const contentClaimId = claim && claim.claim_id;
   const enteredClaimId = enteredClaim && enteredClaim.claim_id;
   const [repostChannel, setRepostChannel] = usePersistedState('repost-channel', 'anonymous');
@@ -85,8 +85,12 @@ function RepostCreate(props: Props) {
     repostNameError = __('You already have a claim with this name.');
   }
 
+  const repostUrlName = `lbry://${
+    !repostChannel || repostChannel === CHANNEL_NEW || repostChannel === 'anonymous' ? '' : `${repostChannel}/`
+  }`;
+
   React.useEffect(() => {
-    if ((repostNameError || repostNameError) && !showAdvanced) {
+    if ((repostNameError || repostNameError || repostChannel !== 'anonymous') && !showAdvanced) {
       setShowAdvanced(true);
     }
   }, [repostBidError, repostNameError, showAdvanced, setShowAdvanced]);
@@ -161,7 +165,7 @@ function RepostCreate(props: Props) {
         <div>
           {name && (
             <FormField
-              label={'Name or lbry:// URL'}
+              label={'Name or lbry:// URL to repost'}
               type="text"
               name="repost_url"
               value={enteredUri}
@@ -170,7 +174,7 @@ function RepostCreate(props: Props) {
             />
           )}
           <fieldset-section>
-            <label>{__('Preview')}</label>
+            <label>{__('Content preview')}</label>
             {(uri || repostUri) && (
               <ClaimPreview
                 key={uri || repostUri}
@@ -184,13 +188,12 @@ function RepostCreate(props: Props) {
               <ClaimPreview actions={''} type={'large'} placeholder={'loading'} showNullPlaceholder />
             )}
           </fieldset-section>
-          <SelectChannel
-            label={__('Channel to repost on')}
-            // hideAnon
-            hideNew
-            channel={repostChannel}
-            onChannelChange={newChannel => setRepostChannel(newChannel)}
-          />
+          {!showAdvanced && (
+            <fieldset-section>
+              <label>{__('Repost url')}</label>
+              <div className="button--uri-indicator">{`${repostUrlName}${repostName}`}</div>
+            </fieldset-section>
+          )}
           {!showAdvanced && (
             <div className="section__actions">
               <Button button="link" label={__('Advanced')} onClick={() => setShowAdvanced(true)} />
@@ -202,10 +205,8 @@ function RepostCreate(props: Props) {
               <fieldset-section>
                 <fieldset-group class="fieldset-group--smushed fieldset-group--disabled-prefix">
                   <fieldset-section>
-                    <label>{__('Name')}</label>
-                    <div className="form-field__prefix">{`lbry://${
-                      !repostChannel || repostChannel === CHANNEL_NEW ? '' : `${repostChannel}/`
-                    }`}</div>
+                    <label>{__('Repost url')}</label>
+                    <div className="form-field__prefix">{repostUrlName}</div>
                   </fieldset-section>
                   <FormField
                     type="text"
@@ -216,7 +217,6 @@ function RepostCreate(props: Props) {
                   />
                 </fieldset-group>
               </fieldset-section>
-
               <div className="form-field__help">
                 <I18nMessage
                   tokens={{
@@ -228,6 +228,14 @@ function RepostCreate(props: Props) {
                   Change this to repost to a different %lbry_naming_link%.
                 </I18nMessage>
               </div>
+
+              <SelectChannel
+                label={__('Channel to repost on')}
+                // hideAnon
+                hideNew
+                channel={repostChannel}
+                onChannelChange={newChannel => setRepostChannel(newChannel)}
+              />
 
               <FormField
                 type="number"
