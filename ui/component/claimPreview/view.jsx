@@ -131,7 +131,6 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   let shouldHide =
     placeholder !== 'loading' &&
     !showUserBlocked &&
-    // !showNullPlaceholder && // here
     ((abandoned && !showUnresolvedClaim && !showPublishLink) || (!claimIsMine && obscureNsfw && nsfw));
 
   // This will be replaced once blocking is done at the wallet server level

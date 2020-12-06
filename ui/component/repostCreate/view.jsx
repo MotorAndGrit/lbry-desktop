@@ -134,7 +134,7 @@ function RepostCreate(props: Props) {
         name: repostName,
         bid: creditsToString(repostBid),
         channel_id: channelToRepostTo ? channelToRepostTo.claim_id : undefined,
-        claim_id: repostClaimId, // or
+        claim_id: repostClaimId,
       }).then((repostClaim: StreamClaim) => {
         doCheckPendingClaims();
         analytics.apiLogPublish(repostClaim);
